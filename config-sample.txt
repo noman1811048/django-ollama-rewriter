@@ -1,0 +1,7 @@
+DB_USERNAME = 'your_username'
+DB_PASSWORD = 'your_password'
+DB_HOST = 'localhost'
+DB_PORT = 'port'
+DJANGO_DBNAME = 'django_project_database_name'
+LLM_DBNAME ='LLM_DBNAME_project_database_name'
+SECRET_KEY = 'your SECRET_KEY'
