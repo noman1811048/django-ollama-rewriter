@@ -1,9 +1,8 @@
 import os
-from config import DB_USERNAME, DB_PASSWORD, DB_HOST, DB_PORT, DJANGO_DBNAME, LLM_DBNAME, SECRET_KEY
+from config import DB_USERNAME, DB_PASSWORD, DB_HOST, DB_PORT, DJANGO_DBNAME, SECRET_KEY
 from pathlib import Path
+import sys
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 # Quick-start development settings - unsuitable for production
@@ -18,6 +17,10 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Add the djangoAssignment directory to the Python path
+sys.path.append(os.path.join(BASE_DIR, '../djangoAssignment'))
 # Application definition
 
 INSTALLED_APPS = [
@@ -27,7 +30,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'llmApp'
+    'llmApp',
+    'properties'
 ]
 
 MIDDLEWARE = [
@@ -67,20 +71,12 @@ WSGI_APPLICATION = 'cliApplication.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': LLM_DBNAME,
-        'USER': DB_USERNAME,
-        'PASSWORD': DB_PASSWORD,
-        'HOST': DB_HOST,
-        'PORT': DB_PORT,
-    },
-    'django_db': {
-        'ENGINE': 'django.db.backends.postgresql',
         'NAME': DJANGO_DBNAME,
         'USER': DB_USERNAME,
         'PASSWORD': DB_PASSWORD,
         'HOST': DB_HOST,
         'PORT': DB_PORT,
-    }
+    },
 }
 
 
