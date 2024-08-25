@@ -1,5 +1,4 @@
 from django.db import models
-
 from properties.models import Property
 
 class PropertySummary(models.Model):
@@ -7,6 +6,10 @@ class PropertySummary(models.Model):
     summary = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = "Property Summary"
+        verbose_name_plural = "Property Summaries"
 
     def __str__(self):
         return f"Summary for Property {self.property.title}"

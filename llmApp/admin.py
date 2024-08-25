@@ -1,15 +1,10 @@
-from django.db import models
-from properties.models import Property
+from django.contrib import admin
+from .models import PropertySummary
 
-class PropertySummary(models.Model):
-    property = models.OneToOneField(Property, on_delete=models.CASCADE, primary_key=True)
-    summary = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+class PropertySummaryAdmin(admin.ModelAdmin):
+    list_display = ('property', 'summary', 'created_at', 'updated_at')
+    search_fields = ('property__title', 'summary')
+    list_filter = ('created_at', 'updated_at')
+    readonly_fields = ('created_at', 'updated_at')
 
-    class Meta:
-        verbose_name = "Property Summary"
-        verbose_name_plural = "Property Summaries"
-
-    def __str__(self):
-        return f"Summary for Property {self.property.title}"
+admin.site.register(PropertySummary, PropertySummaryAdmin)
