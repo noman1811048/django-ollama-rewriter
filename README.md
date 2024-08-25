@@ -1,123 +1,172 @@
----
+# Django Ollama Property Rewriter
 
-# Django Property Rewriter and Summarizer
+A Django CLI application that rewrites property information using Ollama, an open-source large language model.
 
-## Overview
+## Table of Contents
 
-This Django application provides a CLI command to rewrite property titles and descriptions and generate summaries using the Ollama API. It leverages Django ORM for database interactions and PostgreSQL for data storage.
+1. [Project Overview](#project-overview)
+2. [Features](#features)
+3. [Prerequisites](#prerequisites)
+4. [Project Structure](#project-structure)
+5. [Installation](#installation)
+6. [Configuration](#configuration)
+7. [Usage](#usage)
+8. [Database Schema](#database-schema)
+9. [Contributing](#contributing)
+10. [License](#license)
+
+## Project Overview
+
+This Django CLI application is designed to rewrite property information stored in a database using Ollama. It reads property titles and descriptions, uses Ollama to generate improved versions, and stores the results back in the database. Additionally, it generates and stores summaries for each property.
+
+## Features
+
+- Rewrite property titles and descriptions using Ollama
+- Generate property summaries
+- Store updated information and summaries in PostgreSQL database
+- Django CLI command for easy execution
 
 ## Prerequisites
 
 - Python 3.x
-- Django 4.x
 - PostgreSQL
-- Ollama API access
-- `requests` library for API calls
+- Django
+- Ollama (installed and running on your system)
+- Django_assignment project set up and running
+
+## Project Structure
+
+```
+root/
+├── django-ollama-rewriter/
+│   ├── cliApplication/
+│   │   ├── __init__.py
+│   │   ├── asgi.py
+│   │   ├── settings.py
+│   │   ├── urls.py
+│   │   └── wsgi.py
+│   ├── llmApp/
+│   │   ├── management/
+│   │   │   └── commands/
+│   │   │       └── rewrite_property_info.py
+│   │   ├── migrations/
+│   │   ├── __init__.py
+│   │   ├── admin.py
+│   │   ├── apps.py
+│   │   ├── models.py
+│   │   ├── tests.py
+│   │   └── views.py
+│   ├── .gitignore
+│   ├── config.py
+│   ├── manage.py
+│   ├── README.md
+│   └── requirements.txt
+└── djangoAssignment/
+```
 
 ## Installation
 
-1. **Clone the Repository**
+Before proceeding with the installation of this project, please make sure you have already set up and run the `Django_assignment` project.
+GitHub repository: https://github.com/noman1811048/djangoAssignment.git
 
-   ```bash
+1. Clone the repository:
+   ```
    git clone https://github.com/noman1811048/django-ollama-rewriter.git
    cd django-ollama-rewriter
    ```
 
-2. **Create and Activate a Virtual Environment**
-
-   ```bash
+2. Create and activate a virtual environment:
+   ```
    python -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   source venv/bin/activate  # On Windows, use `venv\Scripts\activate`
    ```
 
-3. **Install Dependencies**
-
-   ```bash
+3. Install the required packages:
+   ```
    pip install -r requirements.txt
    ```
 
-4. **Configure PostgreSQL**
+4. Set up the PostgreSQL database and update the `config.py` file with your database credentials.
 
-   Ensure PostgreSQL is running and create a database named `properties` (or your preferred name).
-
-5. **Update Django Settings**
-
-   Edit `cliApplication/settings.py` to configure your PostgreSQL database:
-
-   ```python
-   DATABASES = {
-       'default': {
-           'ENGINE': 'django.db.backends.postgresql',
-           'NAME': 'LLM_DBNAME',
-           'USER': 'DB_USERNAME',
-           'PASSWORD': 'DB_PASSWORD',
-           'HOST': 'DB_HOST',
-           'PORT': 'DB_PORT',
-       },
-       'django_db': {
-           'ENGINE': 'django.db.backends.postgresql',
-           'NAME': 'DJANGO_DBNAME',
-           'USER': 'DB_USERNAME',
-           'PASSWORD': 'DB_PASSWORD',
-           'HOST': 'DB_HOST',
-           'PORT': 'DB_PORT',
-       }
-   }
+5. Apply migrations:
    ```
-
-6. **Set Up Ollama API**
-
-   Obtain your Ollama API key and update the `your_app/management/commands/sync_database_properties.py` file with your API key:
-
-   ```python
-   OLLAMA_API_KEY = 'your_ollama_api_key'
-   ```
-
-## Usage
-
-1. **Apply Migrations**
-
-   Apply the initial migrations to set up the database schema:
-
-   ```bash
-   python manage.py makemigrations
    python manage.py migrate
    ```
 
-2. **Run the CLI Command**
+6. Install and start Ollama:
+   - Follow the instructions at [Ollama's official website](https://ollama.ai/download) to install Ollama on your system.
 
-   To rewrite property titles and descriptions and generate summaries, run:
-
-   ```bash
-   python manage.py sync_database_properties
+7. Pull the required model (e.g., gemma2:2b):
+   ```
+   ollama pull gemma2:2b
    ```
 
+## Configuration
+
+1. Create a `config.py` file in the root directory with the following content:
+
+   ```python
+   DB_NAME = 'your_database_name'  # This should refer to the database name that was previously configured for the Django project.
+   DB_USER = 'your_database_user'
+   DB_PASSWORD = 'your_database_password'
+   DB_HOST = 'localhost'
+   DB_PORT = 'PORT'
+   ```
+
+2. Ensure Ollama is installed and running on your system.
+
+## Usage
+
+1. Ensure Ollama is running:
+   ```
+   ollama run gemma2:2b
+   ```
+
+2. Run the property rewriter command:
+   ```
+   python manage.py rewrite_properties
+   ```
+   
    This command will:
-   - Rewrite the title and description of each property using the Ollama API.
-   - Update the `Property` table with the rewritten information.
-   - Generate a summary for each property and save it in the `PropertySummary` table.
+   * Rewrite the title and description of each property in the database
+   * Generate a summary for each property
+   * Save the updated information and new summaries to the database
 
-## Code Structure
+3. Create a superuser (Admin user):
+   ```
+   python manage.py createsuperuser
+   ```
 
-- **`your_app/models.py`**: Contains the Django models for `Property` and `PropertySummary`.
-- **`your_app/management/commands/sync_database_properties.py`**: Contains the custom Django management command for rewriting and summarizing property information.
-- **`requirements.txt`**: Lists the Python packages required for the project.
+4. Start the development server:
+   ```
+   python manage.py runserver
+   ```
 
-## Requirements
+5. Access the application at `http://127.0.0.1:8000/`
 
-Add the following to your `requirements.txt`:
+6. Access the admin panel at `http://127.0.0.1:8000/admin/`
 
-```plaintext
-Django>=4.0
-psycopg2-binary
-requests
-```
+## Database Schema
+
+The project uses two main models:
+
+1. `Property` model (existing)
+   - Fields: id, title, description, etc.
+
+2. `PropertySummary` model (new)
+   - Fields:
+     - property (ForeignKey to Property)
+     - summary (TextField)
 
 ## Contributing
 
-If you want to contribute to this project, please fork the repository and create a pull request with your changes. Ensure that your code adheres to the existing coding standards and includes tests where applicable.
+1. Fork the project
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
----
+MIT License
+Copyright (c) 2024 Asadullah Al Noman
