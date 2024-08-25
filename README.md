@@ -66,7 +66,8 @@ root/
 
 ## Installation
 
-Before proceeding with the installation of this project, please make sure you have already set up and run the `Django_assignment` project.
+Before proceeding with the installation of this project, please ensure that the DjangoAssignment project has been set up and is running. Additionally, make sure that both DjangoAssignment and django-ollama-rewriter are in the same directory.
+
 GitHub repository: https://github.com/noman1811048/djangoAssignment.git
 
 1. Clone the repository:
